@@ -1,0 +1,200 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: 'http://localhost:8080'
+    description: Generated server url
+paths:
+  /reservations/reserver:
+    post:
+      tags:
+        - client
+      operationId: reserverChambre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idChambre:
+                  type: integer
+                  format: int32
+                dateArrivee:
+                  type: string
+                  format: date
+                departDepart:
+                  type: string
+                  format: date
+                nbPers:
+                  type: integer
+                  format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /reservations/suggestions:
+    get:
+      tags:
+        - client
+      operationId: getSuggestionsReservations
+      parameters:
+        - name: dateArrivee
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationDTO'
+  /comptabilite/CaTotal:
+    get:
+      tags:
+        - compta
+      operationId: getCaTotal
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PrixDTO'
+  /comptabilite/CaPrevisionnel:
+    get:
+      tags:
+        - compta
+      operationId: getCaPrevisionnel
+      parameters:
+        - name: mois
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PrixDTO'
+  /administration:
+    get:
+      tags:
+        - admin
+      operationId: getAllReservations
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationDTO'
+  /administration/remplissageHotels:
+    get:
+      tags:
+        - admin
+      operationId: getRemplissageHotels
+      parameters:
+        - name: moisDonne
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TauxDeRemplissageDTO'
+  /administration/futuresReservations:
+    get:
+      tags:
+        - admin
+      operationId: getAllFuturesReservations
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationDTO'
+  /reservations/annuler:
+    delete:
+      tags:
+        - client
+      operationId: annulerReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+components:
+  schemas:
+    ReservationDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        nbPersonnes:
+          type: integer
+          format: int32
+        idChambre:
+          type: integer
+          format: int32
+        idHotel:
+          type: integer
+          format: int32
+        dateArrivee:
+          type: string
+          format: date
+        dateDepart:
+          type: string
+          format: date
+    PrixDTO:
+      type: object
+      properties:
+        devise:
+          type: string
+        montant:
+          type: number
+          format: float
+    TauxDeRemplissageDTO:
+      type: object
+      properties:
+        idHotel:
+          type: integer
+          format: int32
+        mois:
+          type: integer
+          format: int32
+        tauxDeRemplissage:
+          type: number
+          format: float
