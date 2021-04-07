@@ -421,3 +421,32 @@ function meteoCompareForm() {
         console.log("error in processing the request", reason);
     });
 }
+
+/* *** */
+
+function mealAjaxCall(url, methodType, callback) {
+    return $.ajax({
+        url: url,
+        method: methodType,
+        dataType: "json"
+    })
+}
+
+function parseJsonToHTML() {
+    // TODO
+}
+
+// La météo sur 3 jours :
+function mealForm() {
+    clearPage();
+    $("#position").html("Traitement en cours...");
+    // TODO
+    let text = document.getElementById("formMeal")["text"].value;
+    let URL = "https://www.themealdb.com/api/json/v1/1/search.php?s=" + text;
+    mealAjaxCall(URL, "GET").then(function (respJson) {
+        // TODO
+    }, function (reason) {
+        console.log("error in processing the request", reason);
+        // TODO
+    });
+}
